@@ -128,40 +128,60 @@
     },
     "1782684004386276bb": {
       "type": "_blocks",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "178268423075693db8": {
+      "type": "_blocks",
       "blocks": {
-        "ai_gen_block_a6ae315_bhUJYB": {
-          "type": "ai_gen_block_a6ae315",
+        "ai_gen_block_ddb5491_Jmy8an": {
+          "type": "ai_gen_block_ddb5491",
           "settings": {
-            "video_url": "https://cdn.shopify.com/videos/c/o/v/1c6429d4b8ec4d9c8bc659e207942e9e.mp4",
-            "video_shopify": "shopify://files/videos/Create_a_cinematic_10_12_second_ultra_high-end_product_intro_video_for_a_premium_hygiene_brand.____T_seed3592258393.mp4",
-            "autoplay": true,
-            "muted": true,
-            "loop": false,
-            "show_controls": false,
-            "show_once": true,
-            "delay": 0,
-            "fade_duration": 0.5,
-            "close_button_size": 50,
-            "close_button_position_top": 30,
-            "close_button_position_right": 30,
-            "close_button_bg": "#ffffff",
-            "close_button_color": "#000000",
-            "close_button_opacity": 80,
-            "show_skip_button": true,
-            "skip_button_text": "Passer",
-            "skip_button_position_bottom": 30,
-            "skip_button_position_right": 30,
-            "skip_button_radius": 8,
-            "skip_button_bg": "#ffffff",
-            "skip_button_color": "#000000",
-            "skip_button_opacity": 80,
-            "overlay_color": "#000000"
+            "logo_width": 300,
+            "title": "Bienvenue",
+            "title_size": 56,
+            "subtitle": "Découvrez notre collection",
+            "subtitle_size": 18,
+            "button_text": "Entrer",
+            "button_text_size": 16,
+            "display_duration": 5,
+            "background_color": "#000000",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_radius": 14
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_a6ae315_bhUJYB"
+        "ai_gen_block_ddb5491_Jmy8an"
       ],
       "settings": {
         "content_direction": "column",
@@ -196,6 +216,7 @@
   "order": [
     "header_announcements_9jGBFp",
     "header_section",
-    "1782684004386276bb"
+    "1782684004386276bb",
+    "178268423075693db8"
   ]
 }
