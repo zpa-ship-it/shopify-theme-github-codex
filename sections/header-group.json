@@ -126,48 +126,42 @@
         "text_color_transparent_collection": ""
       }
     },
-    "1782683419aab34046": {
+    "1782684004386276bb": {
       "type": "_blocks",
       "blocks": {
-        "ai_gen_block_10ddf6d_ebUjGG": {
-          "type": "ai_gen_block_10ddf6d",
+        "ai_gen_block_a6ae315_bhUJYB": {
+          "type": "ai_gen_block_a6ae315",
           "settings": {
             "video_url": "https://cdn.shopify.com/videos/c/o/v/1c6429d4b8ec4d9c8bc659e207942e9e.mp4",
-            "background_image": "shopify://shop_images/d719f5c81955114c65e96b01ac807c8c.png",
-            "video_opacity": 100,
-            "image_opacity": 100,
-            "height": 100,
-            "mobile_height": 80,
-            "desktop_width_percent": 100,
-            "overlay_direction": "to bottom",
-            "overlay_color_start": "rgba(0, 0, 0, 0.5)",
-            "overlay_color_end": "rgba(0, 0, 0, 0)",
-            "overlay_opacity": 100,
-            "background_color": "#000000",
-            "title": "Welcome to our story",
-            "subtitle": "<p>Experience something extraordinary</p>",
-            "text_alignment": "center",
-            "vertical_alignment": "center",
-            "title_color": "#ffffff",
-            "title_size": 72,
-            "subtitle_color": "#ffffff",
-            "subtitle_size": 20,
-            "button_label": "Discover more",
-            "button_link": "",
-            "button_background": "#ffffff",
-            "button_text_color": "#000000",
-            "button_border": "#ffffff",
-            "button_hover_background": "#000000",
-            "button_hover_text": "#ffffff",
-            "button_radius": 8,
-            "button_border_width": 0,
-            "button_text_size": 16
+            "video_shopify": "shopify://files/videos/Create_a_cinematic_10_12_second_ultra_high-end_product_intro_video_for_a_premium_hygiene_brand.____T_seed3592258393.mp4",
+            "autoplay": true,
+            "muted": true,
+            "loop": false,
+            "show_controls": false,
+            "show_once": true,
+            "delay": 0,
+            "fade_duration": 0.5,
+            "close_button_size": 50,
+            "close_button_position_top": 30,
+            "close_button_position_right": 30,
+            "close_button_bg": "#ffffff",
+            "close_button_color": "#000000",
+            "close_button_opacity": 80,
+            "show_skip_button": true,
+            "skip_button_text": "Passer",
+            "skip_button_position_bottom": 30,
+            "skip_button_position_right": 30,
+            "skip_button_radius": 8,
+            "skip_button_bg": "#ffffff",
+            "skip_button_color": "#000000",
+            "skip_button_opacity": 80,
+            "overlay_color": "#000000"
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_10ddf6d_ebUjGG"
+        "ai_gen_block_a6ae315_bhUJYB"
       ],
       "settings": {
         "content_direction": "column",
@@ -202,6 +196,6 @@
   "order": [
     "header_announcements_9jGBFp",
     "header_section",
-    "1782683419aab34046"
+    "1782684004386276bb"
   ]
 }
