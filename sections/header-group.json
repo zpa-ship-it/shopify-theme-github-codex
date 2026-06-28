@@ -159,30 +159,6 @@
     },
     "178268423075693db8": {
       "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_ddb5491_Jmy8an": {
-          "type": "ai_gen_block_ddb5491",
-          "settings": {
-            "logo_width": 300,
-            "title": "Bienvenue",
-            "title_size": 56,
-            "subtitle": "Découvrez notre collection",
-            "subtitle_size": 18,
-            "button_text": "Entrer",
-            "button_text_size": 16,
-            "display_duration": 5,
-            "background_color": "#000000",
-            "text_color": "#ffffff",
-            "button_background": "#ffffff",
-            "button_text_color": "#000000",
-            "button_radius": 14
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_ddb5491_Jmy8an"
-      ],
       "settings": {
         "content_direction": "row",
         "vertical_on_mobile": true,
