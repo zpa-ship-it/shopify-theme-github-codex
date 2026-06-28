@@ -18,10 +18,13 @@
           "type": "_announcement",
           "settings": {
             "text": "Welcome to our store",
+            "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
+            "weight": "",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "none",
+            "text_color": ""
           },
           "blocks": {}
         }
@@ -58,6 +61,8 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "background_color": "{{ settings.color_palette.background }}",
+            "text_color": "",
             "type_font_primary_size": "0.875rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",
@@ -67,6 +72,8 @@
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
             "navigation_bar": false,
+            "background_color_navigation_bar": "{{ settings.color_palette.background }}",
+            "text_color_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
             "drawer_dividers": false
@@ -78,6 +85,7 @@
         "logo_position": "left",
         "menu_position": "left",
         "menu_row": "top",
+        "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
@@ -93,16 +101,107 @@
         "enable_sticky_header": "always",
         "divider_width": 0,
         "divider_size": "page-width",
+        "divider_color": "",
         "border_width": 0,
+        "bottom_border_color": "",
+        "actions_display_style": "icon",
+        "actions_font_size": "0.875rem",
+        "actions_font": "body",
+        "actions_text_case": "none",
         "background_color_top": "{{ settings.color_palette.background }}",
+        "text_color_top": "",
+        "background_color_bottom": "",
+        "text_color_bottom": "",
+        "bubble_style": "default",
+        "bubble_background_color": "",
+        "bubble_text_color": "",
         "enable_transparent_header_home": false,
+        "home_inverse_logo": false,
+        "text_color_transparent_home": "",
         "enable_transparent_header_product": false,
-        "enable_transparent_header_collection": false
+        "product_inverse_logo": false,
+        "text_color_transparent_product": "",
+        "enable_transparent_header_collection": false,
+        "collection_inverse_logo": false,
+        "text_color_transparent_collection": ""
+      }
+    },
+    "1782683419aab34046": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_10ddf6d_ebUjGG": {
+          "type": "ai_gen_block_10ddf6d",
+          "settings": {
+            "video_url": "https://cdn.shopify.com/videos/c/o/v/1c6429d4b8ec4d9c8bc659e207942e9e.mp4",
+            "background_image": "shopify://shop_images/d719f5c81955114c65e96b01ac807c8c.png",
+            "video_opacity": 100,
+            "image_opacity": 100,
+            "height": 100,
+            "mobile_height": 80,
+            "desktop_width_percent": 100,
+            "overlay_direction": "to bottom",
+            "overlay_color_start": "rgba(0, 0, 0, 0.5)",
+            "overlay_color_end": "rgba(0, 0, 0, 0)",
+            "overlay_opacity": 100,
+            "background_color": "#000000",
+            "title": "Welcome to our story",
+            "subtitle": "<p>Experience something extraordinary</p>",
+            "text_alignment": "center",
+            "vertical_alignment": "center",
+            "title_color": "#ffffff",
+            "title_size": 72,
+            "subtitle_color": "#ffffff",
+            "subtitle_size": 20,
+            "button_label": "Discover more",
+            "button_link": "",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_border": "#ffffff",
+            "button_hover_background": "#000000",
+            "button_hover_text": "#ffffff",
+            "button_radius": 8,
+            "button_border_width": 0,
+            "button_text_size": 16
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_10ddf6d_ebUjGG"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   },
   "order": [
     "header_announcements_9jGBFp",
-    "header_section"
+    "header_section",
+    "1782683419aab34046"
   ]
 }
