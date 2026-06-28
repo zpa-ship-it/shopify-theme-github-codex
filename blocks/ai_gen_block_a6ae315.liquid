@@ -1,0 +1,479 @@
+{% doc %}
+  @prompt
+    full screen video when someone enter the site
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-fullscreen-video-{{ ai_gen_id }} {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity {{ block.settings.fade_duration }}s ease, visibility {{ block.settings.fade_duration }}s ease;
+  }
+
+  .ai-fullscreen-video-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-fullscreen-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-fullscreen-video-player-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-fullscreen-video-close-{{ ai_gen_id }} {
+    position: absolute;
+    top: {{ block.settings.close_button_position_top }}px;
+    right: {{ block.settings.close_button_position_right }}px;
+    background-color: {{ block.settings.close_button_bg }};
+    color: {{ block.settings.close_button_color }};
+    border: none;
+    width: {{ block.settings.close_button_size }}px;
+    height: {{ block.settings.close_button_size }}px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: {{ block.settings.close_button_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-fullscreen-video-close-{{ ai_gen_id }}:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  .ai-fullscreen-video-close-{{ ai_gen_id }} svg {
+    width: calc({{ block.settings.close_button_size }}px * 0.5);
+    height: calc({{ block.settings.close_button_size }}px * 0.5);
+  }
+
+  .ai-fullscreen-video-skip-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: {{ block.settings.skip_button_position_bottom }}px;
+    right: {{ block.settings.skip_button_position_right }}px;
+    background-color: {{ block.settings.skip_button_bg }};
+    color: {{ block.settings.skip_button_color }};
+    border: none;
+    padding: 12px 24px;
+    border-radius: {{ block.settings.skip_button_radius }}px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10000;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: {{ block.settings.skip_button_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-fullscreen-video-skip-{{ ai_gen_id }}:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-fullscreen-video-close-{{ ai_gen_id }} {
+      top: {{ block.settings.close_button_position_top | times: 0.7 }}px;
+      right: {{ block.settings.close_button_position_right | times: 0.7 }}px;
+      width: {{ block.settings.close_button_size | times: 0.8 }}px;
+      height: {{ block.settings.close_button_size | times: 0.8 }}px;
+    }
+
+    .ai-fullscreen-video-skip-{{ ai_gen_id }} {
+      bottom: {{ block.settings.skip_button_position_bottom | times: 0.7 }}px;
+      right: {{ block.settings.skip_button_position_right | times: 0.7 }}px;
+      padding: 10px 20px;
+      font-size: 12px;
+    }
+  }
+{% endstyle %}
+
+<fullscreen-video-{{ ai_gen_id }}
+  class="ai-fullscreen-video-{{ ai_gen_id }}"
+  data-autoplay="{{ block.settings.autoplay }}"
+  data-show-once="{{ block.settings.show_once }}"
+  data-delay="{{ block.settings.delay }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-fullscreen-video-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.video_url != blank %}
+      <video
+        class="ai-fullscreen-video-player-{{ ai_gen_id }}"
+        {% if block.settings.autoplay %}autoplay{% endif %}
+        {% if block.settings.muted %}muted{% endif %}
+        {% if block.settings.loop %}loop{% endif %}
+        playsinline
+        {% if block.settings.show_controls %}controls{% endif %}
+      >
+        <source src="{{ block.settings.video_url }}" type="video/mp4">
+      </video>
+    {% elsif block.settings.video_shopify != blank %}
+      {{
+        block.settings.video_shopify
+        | video_tag:
+          class: 'ai-fullscreen-video-player-' | append: ai_gen_id,
+          autoplay: block.settings.autoplay,
+          muted: block.settings.muted,
+          loop: block.settings.loop,
+          controls: block.settings.show_controls
+      }}
+    {% else %}
+      <div
+        class="ai-fullscreen-video-player-{{ ai_gen_id }}"
+        style="background-color: #000; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px;"
+      >
+        Ajoutez une vidéo pour commencer
+      </div>
+    {% endif %}
+
+    <button
+      class="ai-fullscreen-video-close-{{ ai_gen_id }}"
+      aria-label="Fermer la vidéo"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    {% if block.settings.show_skip_button %}
+      <button class="ai-fullscreen-video-skip-{{ ai_gen_id }}">
+        {{ block.settings.skip_button_text }}
+      </button>
+    {% endif %}
+  </div>
+</fullscreen-video-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FullscreenVideo{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.videoElement = null;
+        this.closeButton = null;
+        this.skipButton = null;
+        this.hasBeenShown = false;
+      }
+
+      connectedCallback() {
+        this.videoElement = this.querySelector('.ai-fullscreen-video-player-{{ ai_gen_id }}');
+        this.closeButton = this.querySelector('.ai-fullscreen-video-close-{{ ai_gen_id }}');
+        this.skipButton = this.querySelector('.ai-fullscreen-video-skip-{{ ai_gen_id }}');
+
+        const autoplay = this.dataset.autoplay === 'true';
+        const showOnce = this.dataset.showOnce === 'true';
+        const delay = parseInt(this.dataset.delay) || 0;
+
+        if (showOnce && sessionStorage.getItem('fullscreen-video-shown-{{ ai_gen_id }}')) {
+          return;
+        }
+
+        this.setupEventListeners();
+
+        if (autoplay) {
+          setTimeout(() => {
+            this.show();
+          }, delay * 1000);
+        }
+      }
+
+      setupEventListeners() {
+        if (this.closeButton) {
+          this.closeButton.addEventListener('click', () => {
+            this.hide();
+          });
+        }
+
+        if (this.skipButton) {
+          this.skipButton.addEventListener('click', () => {
+            this.hide();
+          });
+        }
+
+        if (this.videoElement && this.videoElement.tagName === 'VIDEO') {
+          this.videoElement.addEventListener('ended', () => {
+            this.hide();
+          });
+        }
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.classList.contains('active')) {
+            this.hide();
+          }
+        });
+      }
+
+      show() {
+        this.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        if (this.videoElement && this.videoElement.tagName === 'VIDEO') {
+          this.videoElement.play().catch(() => {});
+        }
+
+        const showOnce = this.dataset.showOnce === 'true';
+        if (showOnce) {
+          sessionStorage.setItem('fullscreen-video-shown-{{ ai_gen_id }}', 'true');
+        }
+      }
+
+      hide() {
+        this.classList.remove('active');
+        document.body.style.overflow = '';
+
+        if (this.videoElement && this.videoElement.tagName === 'VIDEO') {
+          this.videoElement.pause();
+          this.videoElement.currentTime = 0;
+        }
+      }
+    }
+
+    customElements.define('fullscreen-video-{{ ai_gen_id }}', FullscreenVideo{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Fullscreen video intro",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Vidéo"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "URL de la vidéo"
+    },
+    {
+      "type": "video",
+      "id": "video_shopify",
+      "label": "Vidéo Shopify"
+    },
+    {
+      "type": "paragraph",
+      "content": "Utilisez l'URL de la vidéo ou téléchargez une vidéo Shopify. La vidéo Shopify sera prioritaire."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Lecture automatique",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muet",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Boucle",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Afficher les contrôles",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Comportement"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_once",
+      "label": "Afficher une seule fois par session",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Délai avant affichage",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "fade_duration",
+      "label": "Durée du fondu",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "unit": "s",
+      "default": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Bouton de fermeture"
+    },
+    {
+      "type": "range",
+      "id": "close_button_size",
+      "label": "Taille",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "close_button_position_top",
+      "label": "Position haut",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "close_button_position_right",
+      "label": "Position droite",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "close_button_bg",
+      "label": "Couleur de fond",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "close_button_color",
+      "label": "Couleur de l'icône",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "close_button_opacity",
+      "label": "Opacité",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Bouton passer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_skip_button",
+      "label": "Afficher le bouton passer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "skip_button_text",
+      "label": "Texte du bouton",
+      "default": "Passer"
+    },
+    {
+      "type": "range",
+      "id": "skip_button_position_bottom",
+      "label": "Position bas",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "skip_button_position_right",
+      "label": "Position droite",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "skip_button_radius",
+      "label": "Rayon de bordure",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "skip_button_bg",
+      "label": "Couleur de fond",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "skip_button_color",
+      "label": "Couleur du texte",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "skip_button_opacity",
+      "label": "Opacité",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Arrière-plan"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Couleur de superposition",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fullscreen video intro"
+    }
+  ]
+}
+{% endschema %}

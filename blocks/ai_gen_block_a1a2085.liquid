@@ -1,0 +1,464 @@
+{% doc %}
+  @prompt
+    Je veux que tu corriges mon thème Shopify pour créer une vraie intro cinematic fullscreen.
+    
+    Problème actuel :
+    - L’intro apparaît mais elle n’est pas vraiment fullscreen.
+    - Le header/menu Shopify reste visible au-dessus.
+    - Les produits/collections apparaissent en arrière-plan ou en bas de l’écran.
+    - Je veux une intro propre qui bloque toute la boutique avant l’entrée.
+    
+    Objectif exact :
+    Créer une intro plein écran au chargement de la page d’accueil, avec ma vidéo en background fullscreen. Pendant l’intro, on ne doit voir AUCUN produit, AUCUNE collection, AUCUN header, AUCUN menu, AUCUN contenu du site derrière. Seulement l’intro.
+    
+    Comportement voulu :
+    - L’intro doit couvrir 100% de l’écran avec `position: fixed`, `inset: 0`, `width: 100vw`, `height: 100vh`, et un `z-index` très élevé.
+    - Le fond doit être ma vidéo, en `object-fit: cover`.
+    - Le body/html doivent être bloqués en scroll pendant l’intro avec `overflow: hidden`.
+    - Le header, les produits et tout le contenu Shopify doivent être invisibles ou recouverts tant que l’intro est active.
+    - Ajouter un bouton “Entrer” au centre ou en bas.
+    - Quand on clique “Entrer”, l’intro disparaît avec un fade-out, le scroll revient, et la boutique devient visible.
+    - L’intro doit s’afficher seulement sur la page d’accueil.
+    - Option : ne l’afficher qu’une seule fois par session avec `sessionStorage`.
+    
+    Merci de modifier le code Liquid/CSS/JS nécessaire pour que l’intro soit un vrai overlay fullscreen, pas une section normale dans la page.
+    
+    Important :
+    Ne pas placer l’intro comme une section qui pousse le contenu vers le bas. Elle doit être au-dessus de tout le site.
+    Ne pas laisser les produits visibles en dessous.
+    Ne pas laisser le header visible pendant l’intro.
+    Ne pas afficher de contenu boutique avant que l’utilisateur clique sur “Entrer”.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-cinematic-intro-{{ ai_gen_id }} {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity {{ block.settings.fade_duration }}s ease, visibility {{ block.settings.fade_duration }}s ease;
+  }
+
+  .ai-cinematic-intro-{{ ai_gen_id }}.ai-intro-hidden-{{ ai_gen_id }} {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ai-cinematic-intro-video-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .ai-cinematic-intro-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .ai-cinematic-intro-title-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .ai-cinematic-intro-subtitle-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.subtitle_size }}px;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .ai-cinematic-intro-button-{{ ai_gen_id }} {
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: {{ block.settings.button_text_transform }};
+    font-weight: 600;
+  }
+
+  .ai-cinematic-intro-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    color: {{ block.settings.button_hover_text_color }};
+    border-color: {{ block.settings.button_hover_border_color }};
+    transform: scale(1.05);
+  }
+
+  .ai-cinematic-intro-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, {{ block.settings.overlay_opacity }});
+    z-index: 1;
+  }
+
+  body.ai-intro-active-{{ ai_gen_id }} {
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-cinematic-intro-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.6 }}px;
+    }
+
+    .ai-cinematic-intro-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_size | times: 0.7 }}px;
+    }
+
+    .ai-cinematic-intro-button-{{ ai_gen_id }} {
+      font-size: {{ block.settings.button_font_size | times: 0.9 }}px;
+      padding: {{ block.settings.button_padding_vertical | times: 0.8 }}px {{ block.settings.button_padding_horizontal | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+<cinematic-intro-{{ ai_gen_id }}
+  class="ai-cinematic-intro-{{ ai_gen_id }}"
+  data-show-once="{{ block.settings.show_once }}"
+  data-fade-duration="{{ block.settings.fade_duration }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.background_video %}
+    <video
+      class="ai-cinematic-intro-video-{{ ai_gen_id }}"
+      autoplay
+      muted
+      loop
+      playsinline
+    >
+      <source src="{{ block.settings.background_video }}" type="video/mp4">
+    </video>
+  {% elsif block.settings.background_image %}
+    <img
+      src="{{ block.settings.background_image | image_url: width: 2000 }}"
+      alt="{{ block.settings.background_image.alt | escape }}"
+      class="ai-cinematic-intro-video-{{ ai_gen_id }}"
+      loading="eager"
+    >
+  {% endif %}
+
+  <div class="ai-cinematic-intro-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-cinematic-intro-content-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h1 class="ai-cinematic-intro-title-{{ ai_gen_id }}">{{ block.settings.title }}</h1>
+    {% endif %}
+
+    {% if block.settings.subtitle != blank %}
+      <p class="ai-cinematic-intro-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+    {% endif %}
+
+    <button
+      class="ai-cinematic-intro-button-{{ ai_gen_id }}"
+      aria-label="{{ block.settings.button_text }}"
+    >
+      {{ block.settings.button_text }}
+    </button>
+  </div>
+</cinematic-intro-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CinematicIntro{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.button = this.querySelector('.ai-cinematic-intro-button-{{ ai_gen_id }}');
+        this.showOnce = this.dataset.showOnce === 'true';
+        this.fadeDuration = parseFloat(this.dataset.fadeDuration) * 1000;
+      }
+
+      connectedCallback() {
+        if (this.shouldShowIntro()) {
+          this.showIntro();
+          this.setupEventListeners();
+        } else {
+          this.hideIntroImmediately();
+        }
+      }
+
+      shouldShowIntro() {
+        if (!this.isHomePage()) {
+          return false;
+        }
+
+        if (this.showOnce) {
+          const hasSeenIntro = sessionStorage.getItem('ai-intro-seen-{{ ai_gen_id }}');
+          return !hasSeenIntro;
+        }
+
+        return true;
+      }
+
+      isHomePage() {
+        return window.location.pathname === '/' || window.location.pathname === '/index';
+      }
+
+      showIntro() {
+        document.body.classList.add('ai-intro-active-{{ ai_gen_id }}');
+        this.classList.remove('ai-intro-hidden-{{ ai_gen_id }}');
+      }
+
+      hideIntroImmediately() {
+        this.classList.add('ai-intro-hidden-{{ ai_gen_id }}');
+        document.body.classList.remove('ai-intro-active-{{ ai_gen_id }}');
+      }
+
+      setupEventListeners() {
+        this.button.addEventListener('click', () => {
+          this.closeIntro();
+        });
+      }
+
+      closeIntro() {
+        this.classList.add('ai-intro-hidden-{{ ai_gen_id }}');
+
+        setTimeout(() => {
+          document.body.classList.remove('ai-intro-active-{{ ai_gen_id }}');
+        }, this.fadeDuration);
+
+        if (this.showOnce) {
+          sessionStorage.setItem('ai-intro-seen-{{ ai_gen_id }}', 'true');
+        }
+      }
+    }
+
+    customElements.define('cinematic-intro-{{ ai_gen_id }}', CinematicIntro{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Intro cinématique",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Média de fond"
+    },
+    {
+      "type": "video_url",
+      "id": "background_video",
+      "label": "Vidéo de fond",
+      "accept": ["youtube", "vimeo"],
+      "info": "Utilisez une vidéo YouTube ou Vimeo, ou téléchargez un fichier MP4 dans les fichiers du thème"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Image de fond",
+      "info": "Utilisé si aucune vidéo n'est fournie"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacité de l'overlay",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3
+    },
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Bienvenue"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Taille du titre",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Découvrez notre collection"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Taille du sous-titre",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Couleur du texte",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Bouton"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Entrer"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Taille de police",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "button_text_transform",
+      "label": "Transformation du texte",
+      "options": [
+        {
+          "value": "none",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Majuscules"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Padding vertical",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Couleur de fond",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Couleur du texte",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Couleur de bordure",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Largeur de bordure",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Rayon de bordure",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Couleur de fond au survol",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Couleur du texte au survol",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border_color",
+      "label": "Couleur de bordure au survol",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Comportement"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_once",
+      "label": "Afficher une seule fois par session",
+      "default": true,
+      "info": "L'intro ne s'affichera qu'une fois jusqu'à la fermeture du navigateur"
+    },
+    {
+      "type": "range",
+      "id": "fade_duration",
+      "label": "Durée du fade-out",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.5,
+      "unit": "s",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Intro cinématique"
+    }
+  ]
+}
+{% endschema %}
