@@ -159,32 +159,8 @@
     },
     "178268423075693db8": {
       "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_ddb5491_Jmy8an": {
-          "type": "ai_gen_block_ddb5491",
-          "settings": {
-            "logo_width": 300,
-            "title": "Bienvenue",
-            "title_size": 56,
-            "subtitle": "Découvrez notre collection",
-            "subtitle_size": 18,
-            "button_text": "Entrer",
-            "button_text_size": 16,
-            "display_duration": 5,
-            "background_color": "#000000",
-            "text_color": "#ffffff",
-            "button_background": "#ffffff",
-            "button_text_color": "#000000",
-            "button_radius": 14
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_ddb5491_Jmy8an"
-      ],
       "settings": {
-        "content_direction": "column",
+        "content_direction": "row",
         "vertical_on_mobile": true,
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
@@ -195,8 +171,9 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "background_media": "none",
+        "background_media": "video",
         "background_color": "",
+        "video": "shopify://files/videos/Create_a_cinematic_10_12_second_ultra_high-end_product_intro_video_for_a_premium_hygiene_brand.____T_seed3592258393.mp4",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
