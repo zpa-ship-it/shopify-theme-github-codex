@@ -106,3 +106,113 @@
   ]
 }
 {% endschema %}
+
+      border: 0;
+      border-radius: 14px;
+      background: #fff;
+      color: #000;
+      font: inherit;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #CinematicIntro-{{ section.id }} {
+        display: none;
+      }
+    #CinematicIntro-{{ section.id }} .cinematic-intro__enter:hover,
+    #CinematicIntro-{{ section.id }} .cinematic-intro__enter:focus-visible {
+      transform: translateY(-1px);
+      outline: 2px solid rgba(255, 255, 255, 0.72);
+      outline-offset: 4px;
+    }
+  </style>
+
+      const intro = document.getElementById('CinematicIntro-{{ section.id }}');
+      if (!intro) return;
+
+      const video = intro.querySelector('video');
+      const skip = intro.querySelector('button');
+      const sessionKey = intro.dataset.sessionKey;
+      const playOnce = intro.dataset.playOnce === 'true';
+
+      const hideIntro = () => {
+        intro.classList.add('is-hidden');
+        if (playOnce) sessionStorage.setItem(sessionKey, 'true');
+        window.setTimeout(() => intro.remove(), 1000);
+      };
+
+      if (playOnce && sessionStorage.getItem(sessionKey) === 'true') {
+        intro.remove();
+        return;
+      }
+
+      skip?.addEventListener('click', hideIntro);
+      video?.addEventListener('ended', hideIntro);
+      document.documentElement.classList.add('cinematic-intro-active');
+
+      window.setTimeout(hideIntro, {{ section.settings.max_duration | times: 1000 }});
+      if (intro.parentElement !== document.body) {
+        document.body.appendChild(intro);
+      }
+
+      const hideIntro = () => {
+        intro.classList.add('is-hidden');
+        document.documentElement.classList.remove('cinematic-intro-active');
+        if (playOnce) sessionStorage.setItem(sessionKey, 'true');
+        window.setTimeout(() => intro.remove(), 850);
+      };
+
+      intro.querySelector('.cinematic-intro__enter')?.addEventListener('click', hideIntro);
+    })();
+  </script>
+{% endif %}
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Image de chargement"
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo au centre"
+      "type": "text",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Bienvenue"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Sous-titre",
+      "default": "Decouvrez notre collection"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texte du bouton",
+      "default": "Entrer"
+    },
+    {
+      "type": "checkbox",
+      "id": "play_once",
+      "label": "Afficher une seule fois par session",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_duration",
+      "label": "Duree maximum",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    }
+  ],
+  "presets": [
