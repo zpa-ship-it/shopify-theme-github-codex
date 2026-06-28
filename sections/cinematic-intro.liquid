@@ -1,0 +1,109 @@
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.34);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      letter-spacing: 0;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    #CinematicIntro-{{ section.id }} .cinematic-intro__skip:hover,
+    #CinematicIntro-{{ section.id }} .cinematic-intro__skip:focus-visible {
+      background: rgba(255, 255, 255, 0.14);
+      outline: none;
+    }
+
+    @keyframes cinematic-logo-in {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #CinematicIntro-{{ section.id }} {
+        display: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const intro = document.getElementById('CinematicIntro-{{ section.id }}');
+      if (!intro) return;
+
+      const video = intro.querySelector('video');
+      const skip = intro.querySelector('button');
+      const sessionKey = intro.dataset.sessionKey;
+      const playOnce = intro.dataset.playOnce === 'true';
+
+      const hideIntro = () => {
+        intro.classList.add('is-hidden');
+        if (playOnce) sessionStorage.setItem(sessionKey, 'true');
+        window.setTimeout(() => intro.remove(), 1000);
+      };
+
+      if (playOnce && sessionStorage.getItem(sessionKey) === 'true') {
+        intro.remove();
+        return;
+      }
+
+      skip?.addEventListener('click', hideIntro);
+      video?.addEventListener('ended', hideIntro);
+
+      window.setTimeout(hideIntro, {{ section.settings.max_duration | times: 1000 }});
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cinematic intro",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Activer l'intro",
+      "default": true
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video d'intro"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Image de chargement"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo au centre"
+    },
+    {
+      "type": "checkbox",
+      "id": "play_once",
+      "label": "Afficher une seule fois par session",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_duration",
+      "label": "Duree maximum",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cinematic intro"
+    }
+  ]
+}
+{% endschema %}
+
