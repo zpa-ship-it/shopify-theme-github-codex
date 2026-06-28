@@ -215,7 +215,7 @@
             "button_hover_bg_color": "#000000",
             "button_hover_text_color": "#ffffff",
             "button_hover_border_color": "#000000",
-            "show_once": true,
+            "show_once": false,
             "fade_duration": 1
           },
           "blocks": {}
