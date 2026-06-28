@@ -216,3 +216,130 @@
     }
   ],
   "presets": [
+
+    {% if template.name == 'index' and section.settings.video != blank %}
+<div id="cinematicIntro">
+  <video autoplay muted playsinline loop>
+    {% for source in section.settings.video.sources %}
+      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+    {% endfor %}
+  </video>
+
+  <div class="intro-content">
+    <h1>{{ section.settings.title }}</h1>
+    <p>{{ section.settings.subtitle }}</p>
+    <button id="enterSite">Entrer</button>
+  </div>
+</div>
+
+<style>
+  html.intro-lock,
+  html.intro-lock body {
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+
+  #cinematicIntro {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 2147483647 !important;
+    background: #000 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #cinematicIntro video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .intro-content {
+    position: relative !important;
+    z-index: 2 !important;
+    text-align: center !important;
+    color: white !important;
+  }
+
+  .intro-content h1 {
+    color: white !important;
+    font-size: clamp(48px, 8vw, 96px) !important;
+    margin: 0 0 20px !important;
+  }
+
+  .intro-content p {
+    color: white !important;
+    font-size: 22px !important;
+    margin: 0 0 40px !important;
+  }
+
+  #enterSite {
+    background: white !important;
+    color: black !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 18px 50px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+  }
+
+  #cinematicIntro.hide {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity .7s ease !important;
+  }
+</style>
+
+<script>
+  document.documentElement.classList.add('intro-lock');
+
+  const intro = document.getElementById('cinematicIntro');
+  const btn = document.getElementById('enterSite');
+
+  btn.addEventListener('click', function () {
+    intro.classList.add('hide');
+    document.documentElement.classList.remove('intro-lock');
+
+    setTimeout(function () {
+      intro.remove();
+    }, 700);
+  });
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cinematic intro",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video d'intro"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Bienvenue"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Decouvrez notre collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cinematic intro"
+    }
+  ]
+}
+{% endschema %}
